@@ -1,0 +1,419 @@
+PR5 LED BLINKING
+Write a program using Arduino to control 
+LED (One or more ON/OFF)
+
+void setup() {
+  // initialize digital pin LED_BUILTIN as an output.
+  pinMode(13, OUTPUT);
+}
+
+// the loop function runs over and over again forever
+void loop() {
+  digitalWrite(13, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(200);                       // wait for a second
+  digitalWrite(13, LOW);    // turn the LED off by making the voltage LOW
+  delay(200);                       // wait for a second
+}
+
+PR6 LED COUNTER
+
+Create a program that illuminates the green 
+LED if the counter is less than 100, illuminates the 
+yellow LED if the counter is between 101 and 200 
+and illuminates the red LED if the counter is 
+greater than 200.
+
+int counter = 0; 
+void setup() 
+{
+Serial.begin(9600);
+pinMode(7,OUTPUT);
+pinMode(8,OUTPUT);
+pinMode(9,OUTPUT);
+}
+void loop() { 
+if(counter  == 250) 
+{
+counter=0; 
+}
+if(counter  < 250) 
+{
+Serial.println(counter); 
+}
+counter = counter + 1; 
+delay(100);
+if(counter  < 100 ) 
+{
+digitalWrite(7,LOW);
+digitalWrite(8,LOW);
+digitalWrite(9,HIGH);
+}if(counter  > 101 && counter < 200 ) 
+{
+digitalWrite(7,LOW);
+digitalWrite(8,HIGH);
+digitalWrite(9,LOW);
+}
+if( counter > 200 ) 
+{
+digitalWrite(7,HIGH);
+digitalWrite(8,LOW);
+digitalWrite(9,LOW);
+} 
+}
+
+PR7 RGB
+
+Create a program so that when the user 
+enters ‘b’ the blue light blinks, ‘g’ the green light 
+is illuminated ‘y’ the yellow light is illuminated and 
+‘r’ the red light is illuminated.
+
+int RED = 13;
+int GREEN = 12;
+int YELLOW = 11;
+int BLUE = 10; 
+char ledToBlink; 
+void setup() {
+pinMode(RED,OUTP UT);
+pinMode(YELLOW,OUTPUT);
+pinMode(BLUE,OUTPUT);
+pinMode(GREEN,OUTP UT); 
+Serial.begin(9600);
+}
+void loop() {
+int temp;
+if (Serial.available()  > 0) {
+ledToBlink  = Serial.read();        
+if ((ledToBlink  == 'r') || (ledToBlink  == 'R')) { 
+Serial.print("Blinking  Red LED\n"); 
+temp = 13;
+}
+else if((ledToBlink  == 'g') || (ledToBlink  == 'G')) { 
+Serial.print("Blinking  Green LED\n");
+temp = 12; 
+}
+else if((ledToBlink  == 'y') || (ledToBlink  == 'Y')){
+Serial.print("Blinking  Yellow  LED\n");temp = 11; 
+}
+else if((ledToBlink  == 'b') || (ledToBlink  == 'B')){ 
+Serial.print("Blinking  Blue LED\n");
+temp = 10; 
+}
+else{
+Serial.print("\nInvalid  Choice Try Again  \n"); 
+}
+digitalWrite(temp,  HIGH); 
+delay(1000); 
+digitalWrite(temp,  LOW);
+}
+}
+
+PR10 TEMPRATURE
+
+Write a program read the temperature 
+sensor  and send the values to the serial monitor 
+on the  computer.
+
+
+int baselineTemp  =  0; 
+int  celsius  =  0; 
+int fahrenheit  = 0;
+void setup() 
+{
+pinMode(A2, INPUT);
+pinMode(13,  OUTPUT); 
+Serial.begin(9600);   
+}         
+void loop() 
+{
+INPUT);    
+celsius  =  map(((analogRead(A2)   -  20)  *  3.04),  0,  1023,  -40,  125);   
+fahrenheit = ((celsius * 9) / 5 + 32); 
+Serial.print(celsius); 
+Serial.print("  C, "); 
+Serial.print(fahrenheit);  
+Serial.println(" F ");     
+if (celsius > 40) 
+{
+digitalWrite(13,HIGH); 
+}
+else 
+{
+digitalWrite(13,LOW); 
+}delay(1000); 
+}
+
+PR11
+Write a program so it displays the temperature 
+In Fahrenheit as well as the maximum and minimum 
+Temperatures it has seen.
+
+int val;
+int tempPin = 0; 
+float tfmax; 
+float tfmin = 100; 
+void setup()
+{
+Serial.begin(9600); 
+}
+void loop() 
+{
+val = analogRead(tempPin);
+float mv = ( val/1024.0)*500;
+float cel = mv;
+float farh = (cel*9)/5 + 32;
+if (farh > tfmax) 
+{
+tfmax = farh; 
+}
+if (farh < tfmin) 
+{
+tfmin = farh; 
+}
+Serial.print("TEMPRATURE = ");
+Serial.print(farh);
+Serial.print("*F");
+Serial.println();Serial.print("Max Temp:");
+Serial.print(tfmax);
+Serial.println();
+Serial.print("Min  Temp:");
+Serial.print(tfmin);
+Serial.println();
+Serial.println(); 
+delay(2000); 
+}
+
+PR12
+Write a program to show the temperature and 
+Shows a graph of the recent measurements
+
+
+#include  <SoftwareSerial.h> 
+SoftwareSerial  bt(8, 9); // RX, TX
+#include  "dht.h" 
+#define dataPin A0
+dht DHT;
+int i = 0;
+int temp;
+int hum;
+void setup() {
+Serial.begin(9600); 
+bt.begin(9600); 
+Serial.println("Ready"); 
+delay(2000); 
+pinMode(13, OUTPUT); 
+}
+void loop(){
+int readData = DHT.read11(dataPin); 
+hum = DHT.humidity;
+temp = DHT.temperature; 
+Serial.println();
+Serial.println(hum);
+Serial.print("Humidity:  ");
+Serial.print(",");
+Serial.print("Temp:  "); 
+Serial.println(temp); 
+Serial.print("o");  //degree symbol
+Serial.print("C  ");
+Serial.print(",");
+bt.print(temp);  //send distance to MIT App 
+bt.print(";");
+bt.print(hum);  //send distance to MIT App 
+bt.println(";");if(temp>  31) 
+{
+digitalWrite(13,  HIGH);   // turn the LED on (HIGH is the voltage  level) 
+delay(1000);                       // wait for a second
+} 
+else 
+{
+digitalWrite(13,  LOW);   // turn the LED on (HIGH is the voltage level) 
+delay(1000);                       // wait for a second
+}
+delay(1000); 
+}
+
+PR14
+Understanding the connectivity of Raspberry- 
+Pi /Arduino circuit with IR sensor. Write an 
+Application to detect obstacle and notify user using 
+LED’s.
+
+void setup() 
+{
+pinMode(2, INPUT); 
+pinMode(3,OUTPUT); 
+}
+void loop() 
+{
+digitalWrite(3, LOW); 
+int read=digitalRead(2); 
+if(read == HIGH)
+{
+digitalWrite(3,HIGH); 
+delay(1000); 
+}
+delay(1000); 
+}
+
+PR16
+Write an application to control the operation of 
+Hardware simulated traffic signals
+
+void setup() 
+{
+pinMode(13, OUTPUT);
+pinMode(12, OUTPUT);
+pinMode(7, OUTPUT);
+}
+void loop() 
+{
+digitalWrite(13,  HIGH);
+delay(1000); // Wait for 1000 millisecond(s) 
+digitalWrite(13,  LOW);
+delay(1000); // Wait for 1000 millisecond(s) 
+digitalWrite(12,  HIGH);
+delay(1000); // Wait for 1000 millisecond(s) 
+digitalWrite(12,  LOW);
+delay(1000); // Wait for 1000 millisecond(s) 
+digitalWrite(7,  HIGH);
+delay(2000); // Wait for 1000 millisecond(s) 
+digitalWrite(7,  LOW);
+delay(2000); // Wait for 1000 millisecond(s) 
+}
+
+
+
+LCD PR 
+
+#include <Keypad.h>
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(6,7,2,3,4,5);   //lcd object
+
+const char keymap[3][3] = {
+  {'1','2','3'},
+  {'4','5','6'},
+  {'7','8','9'},
+ };
+
+const char rowPins[4] = {8,9,10};
+const char colPins[4] = {11,12,13};
+
+Keypad myKeypad = Keypad(makeKeymap(keymap),rowPins, colPins, 3, 3);    //keypad object
+  
+void setup() {
+  // put your setup code here, to run once:
+  lcd.begin(16, 2);
+  lcd.print("Keypad Program");
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  //lcd.setCursor(0,0);
+  //lcd.print("Keypad Program");
+  char keyPressed = myKeypad.getKey();
+  if(keyPressed)
+  {
+    //lcd.clear();
+    lcd.setCursor(0,1);
+    lcd.write(keyPressed);
+  }
+}
+  
+void loop(){
+  char customKey = customKeypad.getKey();
+  
+  if (customKey){
+    Serial.println(customKey);
+  }
+}
+
+
+
+TEMP PR
+
+#include <dht.h>
+dht DHT;
+#define DHT11_PIN 2
+float min_t,max_t;
+
+void setup()
+{
+  Serial.begin(9600);
+  Serial.println("Humidity (%),\tTemperature (F)");
+  min_t = 0xffff;
+  max_t=0x00;
+}
+
+void loop()
+{
+  // READ DATA
+  int chk = DHT.read11(DHT11_PIN);
+  // DISPLAY DATA
+  Serial.print(DHT.humidity, 1);
+  Serial.print("\t");
+  Serial.println((DHT.temperature*1.8)+32, 1);
+
+  if(DHT.temperature <= min_t)
+    min_t = DHT.temperature;
+
+  if(DHT.temperature >= max_t)
+    max_t = DHT.temperature;
+
+  Serial.print("minimum=");
+  Serial.print((min_t*1.8)+32);
+
+  Serial.print("\tmaximum=");
+  Serial.println((max_t*1.8)+32);  
+  delay(1000);
+}
+
+
+BLUETOOTH LED
+
+#include<SoftwareSerial.h>
+
+#define LED1 10
+#define LED2 11
+#define LED3 12
+#define LED4 13
+
+/* Create object named bt of the class SoftwareSerial */ 
+SoftwareSerial bt(6,7); /* (Rx,Tx) */  
+
+void setup() {
+  bt.begin(9600); /* Define baud rate for software serial communication */
+  Serial.begin(9600); /* Define baud rate for serial communication */
+  Serial.println("Bluetooth ");
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(LED3, OUTPUT);
+  pinMode(LED4, OUTPUT);
+}
+
+void loop() {
+ char input;
+ if (bt.available()) /* If data is available on serial port */
+ {
+   input = bt.read();
+   Serial.write(input); /* Print character received on to the serial monitor */
+  
+  if(input == '0')
+  {
+  Serial.println("Device OFF");
+  digitalWrite(LED1, HIGH);
+  digitalWrite(LED2, HIGH);
+  digitalWrite(LED3, HIGH);
+  digitalWrite(LED4, HIGH);
+  }
+
+  if(input == '1')
+  {
+  Serial.println("Device ON");  
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
+  digitalWrite(LED3, LOW);
+  digitalWrite(LED4, LOW);
+  }
+  }
+}
